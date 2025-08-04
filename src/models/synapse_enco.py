@@ -35,6 +35,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import cm
 from torch_geometric.nn import MLP,DynamicEdgeConv,PointNetConv,PointTransformerConv
+<<<<<<< HEAD
+=======
+from other.data_dgcnn import load_data
+>>>>>>> 73bc381812ce9ae0b6fb772af25a08190c88ea4b
 
 def knn(x, k):
     inner = -2*torch.matmul(x.transpose(2, 1), x)

@@ -14,11 +14,17 @@ import torch
 import torch.nn.functional as F
 from torch.nn import Linear
 from torch_geometric.nn import fps, global_max_pool, radius
+<<<<<<< HEAD
 from torch_geometric.nn import MLP, PointNetConv,GATConv,PointTransformerConv,PPFConv,XConv
 from torch_geometric.utils import scatter
 from torch import nn
 from src.utils.pointtransformerconv import PointTransformerConv_fix
 # from mamba_ssm.models.mixer_seq_simple import Mamba
+=======
+from torch_geometric.nn import MLP, PointNetConv,GATConv,PointTransformerConv
+from torch_geometric.utils import scatter
+from torch import nn
+>>>>>>> 73bc381812ce9ae0b6fb772af25a08190c88ea4b
 
 
 class Synapformer(torch.nn.Module):
@@ -31,6 +37,7 @@ class Synapformer(torch.nn.Module):
         torch.nn.init.xavier_uniform(self.x, gain=1)
         self.cache_x = None
         
+<<<<<<< HEAD
         
         self.synapse_encoder=synapse_former(represent_features)
         self.maxpool = nn.MaxPool1d(kernel_size=3, stride=3)
@@ -118,6 +125,11 @@ class Synapformer3(torch.nn.Module):
         #TODO
         
         self.synapse_encoder=synapse_former3()
+=======
+        #TODO
+        
+        self.synapse_encoder=synapse_former()
+>>>>>>> 73bc381812ce9ae0b6fb772af25a08190c88ea4b
         self.maxpool = nn.MaxPool1d(kernel_size=3, stride=3)
         self.classmodel=MLP([represent_features+512+512, 512,dataset_num_classes])
 
@@ -143,6 +155,7 @@ class Synapformer3(torch.nn.Module):
         final_node_vector=torch.cat([x,left_node,right_node],dim=1)
         pred =self.classmodel(final_node_vector)
         return  pred
+<<<<<<< HEAD
         
 class synapse_former2(torch.nn.Module):
     def __init__(self):
@@ -150,6 +163,15 @@ class synapse_former2(torch.nn.Module):
 
         self.sa1_module = SAModule(0.5, 0.2, MLP([3, 64, 64, 128]))
         self.sa2_module = SAModule_Transformer_3d(0.25, 0.4, MLP([128 , 128, 128, 256]),MLP([256 + 3, 256, 512, 1024]))
+=======
+
+class synapse_former(torch.nn.Module):
+    def __init__(self):
+        super().__init__()
+
+        self.sa1_module = SAModule(0.5, 0.2, MLP([6, 64, 64, 128]))
+        self.sa2_module = SAModule_Transformer(0.25, 0.4, MLP([128 , 128, 128, 256]),MLP([256 + 6, 256, 512, 1024]))
+>>>>>>> 73bc381812ce9ae0b6fb772af25a08190c88ea4b
         self.mlp = MLP([1024, 512, 512], dropout=0.5, norm=None)
 
     def forward(self,synapse_cordi,batch_index):
@@ -160,7 +182,10 @@ class synapse_former2(torch.nn.Module):
         x, pos, batch = sa2_out
         return self.mlp(x)
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 73bc381812ce9ae0b6fb772af25a08190c88ea4b
 class SAModule(torch.nn.Module):
     def __init__(self, ratio, r, nn):
         super().__init__()
@@ -177,6 +202,7 @@ class SAModule(torch.nn.Module):
         x = self.conv((x, x_dst), (pos, pos[idx]), edge_index)
         pos, batch = pos[idx], batch[idx]
         return x, pos, batch
+<<<<<<< HEAD
     def infer(self,x, pos, batch):
         idx=torch.arange(len(pos), device=pos.device)
         row, col = radius(pos, pos[idx], self.r, batch, batch[idx],
@@ -186,6 +212,8 @@ class SAModule(torch.nn.Module):
         x = self.conv((x, x_dst), (pos, pos[idx]), edge_index)
         #pos, batch = pos[idx], batch[idx]
         return x, pos, batch
+=======
+>>>>>>> 73bc381812ce9ae0b6fb772af25a08190c88ea4b
         
 
 
@@ -198,18 +226,28 @@ class SAModule_Transformer(torch.nn.Module):
         self.nn2 = nn2
         in_channels = nn1.channel_list[0]  
         out_channels = nn1.channel_list[-1]  
+<<<<<<< HEAD
         self.pos=None
+=======
+>>>>>>> 73bc381812ce9ae0b6fb772af25a08190c88ea4b
         
         self.conv = PointTransformerConv(
             in_channels=in_channels, 
             out_channels=out_channels,  
             pos_nn = MLP([6, 64, out_channels], norm=None, plain_last=False),
+<<<<<<< HEAD
             # attn_nn=Linear(out_channels, out_channels)  
             attn_nn=Linear(out_channels, 1)  
         )   
 
     def forward(self, x, pos, batch):
         self.pos=pos
+=======
+            attn_nn=Linear(out_channels, out_channels)  
+        )   
+
+    def forward(self, x, pos, batch):
+>>>>>>> 73bc381812ce9ae0b6fb772af25a08190c88ea4b
         idx = fps(pos, batch, ratio=self.ratio)
         row, col = radius(pos, pos[idx], self.r, batch, batch[idx], max_num_neighbors=64)
         edge_index = torch.stack([col, row], dim=0)
@@ -219,6 +257,7 @@ class SAModule_Transformer(torch.nn.Module):
         x = global_max_pool(x, batch)
         pos = pos.new_zeros((x.size(0), 6))
         batch = torch.arange(x.size(0), device=batch.device)
+<<<<<<< HEAD
        
         return x, pos, batch
         
@@ -495,3 +534,7 @@ class SAModule_Transformer_tran(torch.nn.Module):
         pos = pos.new_zeros((x.size(0), 6))
         batch = torch.arange(x.size(0), device=batch.device)
         return x, pos, batch
+=======
+        return x, pos, batch
+
+>>>>>>> 73bc381812ce9ae0b6fb772af25a08190c88ea4b

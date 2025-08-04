@@ -11,6 +11,10 @@ import numpy as np
 
 class BaseLearner(nn.Module):
     
+<<<<<<< HEAD
+=======
+    #def __init__(self, num_nodes, dataset_num_features, hidden_channels,represent_features, heads, dataset_num_classes): 
+>>>>>>> 73bc381812ce9ae0b6fb772af25a08190c88ea4b
     def __init__(self, connectome_enco:torch.nn.modules,synapse_enco:torch.nn.modules,hidden=256): 
         super().__init__()
         self.connectome_encoder=connectome_enco
@@ -35,6 +39,10 @@ class BaseLearner(nn.Module):
             pass
         
         pred =self.classmodel(final_node_vector)
+<<<<<<< HEAD
         return  pred
     
 
+=======
+        return  pred
+>>>>>>> 73bc381812ce9ae0b6fb772af25a08190c88ea4b

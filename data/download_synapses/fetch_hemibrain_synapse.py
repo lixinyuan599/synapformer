@@ -15,7 +15,7 @@ client = neu.Client(
 )
 
 neurons=[]
-with open('/data3/synapse/MICCAI/src/data/HemiBrain/raw/neuron2ID.txt', 'r') as file:
+with open('/data3/synapse/src/data/HemiBrain/raw/neuron2ID.txt', 'r') as file:
     for line in file:
         columns = line.strip().split(',')
         if columns:
@@ -25,7 +25,7 @@ with open('/data3/synapse/MICCAI/src/data/HemiBrain/raw/neuron2ID.txt', 'r') as 
     print(len(neurons))
 
 for neuron in tqdm(neurons,desc="Processing neurons"):
-    path=f'/data3/synapse/MICCAI/src/data/HemiBrain/synapses/{neuron}.csv'
+    path=f'/data3/synapse/src/data/HemiBrain/synapses/{neuron}.csv'
     if os.path.exists(path):
         pass
     else:
@@ -33,7 +33,7 @@ for neuron in tqdm(neurons,desc="Processing neurons"):
         # connect = fetch_synapse_connections(165599,None,batch_size=500)
 
         df = pd.DataFrame(connect)
-        df.to_csv(f'/data3/synapse/MICCAI/src/data/HemiBrain/synapses/{neuron}.csv', index=False)
+        df.to_csv(f'/data3/synapse/src/data/HemiBrain/synapses/{neuron}.csv', index=False)
 
 
 

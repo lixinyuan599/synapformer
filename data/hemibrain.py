@@ -170,8 +170,11 @@ class HemiBrainSynapse(InMemoryDataset):
 
 
 
+    ### 创建 csv ———> dict
         sysnase_connection_dict = {}
-        csv_files=glob.glob('/data3/synapse/Synapses/HemiBrain/synapses/*.csv')
+        # index_dict={}
+        # count=0
+        csv_files=glob.glob('/data3/lixinyuan/synapse/Synapses/HemiBrain/synapses/*.csv')
         
         for csv_path in tqdm(csv_files):
             neu_name=osp.basename(csv_path)
@@ -198,11 +201,12 @@ class HemiBrainSynapse(InMemoryDataset):
                     else:
                         sysnase_connection_dict[(pre_neu,post_neu)]=[cordi]
 
-        with open ("/data3/synapse/Synapses/HemiBrain/HemiBrain_sysnase_connection_dict111.pkl" , "wb") as file:
+        with open ("/data3/lixinyuan/synapse/Synapses/HemiBrain/HemiBrain_sysnase_connection_dict111.pkl" , "wb") as file:
             pickle.dump(sysnase_connection_dict , file)
         print("down!!!!!!!!!!!!!!!")
 
 
+    ### 创建 synapse 和 synapse index      
         
         
         synapse=[]
@@ -210,20 +214,27 @@ class HemiBrainSynapse(InMemoryDataset):
         synapse_id=0
 
     
+        #count=0
         for i in tqdm(range(edge_index.size(1))):
             
             neu1,neu2=int(edge_index[:,i][0]),int(edge_index[:,i][1])
             
             if (neu1,neu2) in sysnase_connection_dict:
                 synapse.append(sysnase_connection_dict[(neu1,neu2)])
+                #synapse_index.append(synapse_index[-1]+len(sysnase_connection_dict[(neu1,neu2)]))
                 synapse_index.append([synapse_id]*len(sysnase_connection_dict[(neu1,neu2)]))
                 synapse_id+=1
             else:
                 data_list = [0, 0, 0, 0, 0, 0]
                 tensor_data = torch.tensor(data_list)
                 synapse.append([tensor_data])
+                #synapse_index.append(synapse_index[-1]+1)
                 synapse_index.append([synapse_id])
                 synapse_id+=1
+            # count+=1
+            # if count>50:
+            #     break
+            
         synapse=np.concatenate(synapse,axis=0)
         synapse=torch.from_numpy(synapse)
         
@@ -233,8 +244,8 @@ class HemiBrainSynapse(InMemoryDataset):
         
 
 
-        index = torch.randperm(len(y)).tolist() 
-        train_index = index[:len(y)//10*8] 
+        index = torch.randperm(len(y)).tolist() #torch.randperm(len(y)) 生成一个从 0 到 len(y)-1 的随机排列的整数序列。
+        train_index = index[:len(y)//10*8] #len(y)//10*8 计算出 y 长度的 80%（整数除法）
         test_index = index[len(y)//10*8:len(y)//10*9]
         val_index = index[len(y)//10*9:]
 
@@ -245,12 +256,18 @@ class HemiBrainSynapse(InMemoryDataset):
         val_mask[val_index] = True
         test_mask[test_index] = True
 
+        #data = Data(edge_index=edge_index,y=y,labelnames=labelname,names=neuronname,edge_attr=edge_attr)
         data = Data(edge_index=edge_index,y=y,labelnames=labelname,names=neuronname,edge_attr=edge_attr,synapse=synapse,synapse_index=synapse_index)
         
     
         data.train_mask = train_mask
         data.val_mask = val_mask
         data.test_mask = test_mask
+        
+        # data.train_index=train_index
+        # data.test_index=test_index
+        # data.val_index=val_index
+
         data = data if self.pre_transform is None else self.pre_transform(data)
         torch.save(self.collate([data]), self.processed_paths[0])
     def __repr__(self) -> str:
@@ -261,7 +278,7 @@ class HemiBrainSynapse(InMemoryDataset):
 if __name__=='__main__':
     from torch_geometric.loader import NeighborLoader
     from torch_geometric.datasets import Planetoid
-    p='/data3/synapse/Synapses/HemiBrain'
+    p='/data3/lixinyuan/synapse/Synapses/HemiBrain'
     data=HemiBrainSynapse(p)
     a=1
     

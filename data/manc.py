@@ -114,7 +114,9 @@ class Manc(InMemoryDataset):
     def save_neuron2label_dict(self, output_file):
 
         if hasattr(self, 'neuron2label_dict'):
+            # 将字典转换为 DataFrame
             df = pd.DataFrame(list(self.neuron2label_dict.items()), columns=['bodyId', 'type'])
+            # 保存为 CSV 文件
             df.to_csv(output_file, index=False)
             print(f"Saved neuron2label_dict to {output_file}")
         else:
@@ -141,6 +143,7 @@ class Manc(InMemoryDataset):
 
         connections=pd.read_csv(osp.join(raw_dir,'connections2.csv'))
         
+        # edge_index=list(zip(connections['bodyId_pre'].to_list(),connections['bodyId_post'].to_list()))
 
         edge_attr=connections['weight'].to_list()
         edge_attr=torch.Tensor(edge_attr)
@@ -149,7 +152,8 @@ class Manc(InMemoryDataset):
         label_set= set(neuron2label.values())
         label2ID = {np.nan: 0}
         label2ID.update({l: k+1 for k, l in enumerate(sorted(label_set - {np.nan}))})
-        with open ('/data3/synapse/Synapses/Manc/label.txt','w',encoding='utf-8') as file:
+        # label2ID={l:k for k,l in enumerate(label_set)}
+        with open ('/data3/lixinyuan/synapse/Synapses/Manc/label.txt','w',encoding='utf-8') as file:
             json.dump(label2ID,file,ensure_ascii=False,indent=4)
             
         y=[]
@@ -167,8 +171,11 @@ class Manc(InMemoryDataset):
         x=x.to(dtype=torch.float32)
 
 
+    ### 创建 csv ———> dict
         sysnase_connection_dict = {}
-        csv_files=glob.glob('/data0/project/Synapses/Manc/synapses/*.csv')
+        # index_dict={}
+        # count=0
+        csv_files=glob.glob('/data0/lixinyuan/lixinyuan__/project/Synapses/Manc/synapses/*.csv')
         
         for csv_path in tqdm(csv_files):
             neu_name=osp.basename(csv_path)
@@ -182,12 +189,13 @@ class Manc(InMemoryDataset):
                 row=df.loc[i]
                 pre_neu=int(row['bodyId_pre'])
                 post_neu=int(row['bodyId_post'])
+                # if pre_neu and post_neu in neu2ID.keys():
                 if pre_neu in neu2ID and post_neu in neu2ID.keys():
                     pre_neu=int(neu2ID[pre_neu])
                     post_neu=int(neu2ID[post_neu])
 
                     cordi=row[['x_pre','y_pre','z_pre','x_post','y_post','z_post']].to_numpy()
-                    cordi = cordi.astype(np.int64)  
+                    cordi = cordi.astype(np.int64)  # 或 np.int64，取决于需要的类型
                     cordi = torch.tensor(cordi, dtype=torch.int64)
                     
                     if (pre_neu,post_neu) in sysnase_connection_dict:
@@ -222,8 +230,8 @@ class Manc(InMemoryDataset):
         synapse_index = torch.cat([torch.tensor(index) for index in synapse_index])
         synapse_index=torch.tensor(synapse_index)    
 
-        index = torch.randperm(len(y)).tolist() 
-        train_index = index[:len(y)//10*8] 
+        index = torch.randperm(len(y)).tolist() #torch.randperm(len(y)) 生成一个从 0 到 len(y)-1 的随机排列的整数序列。
+        train_index = index[:len(y)//10*8] #len(y)//10*8 计算出 y 长度的 80%（整数除法）
         test_index = index[len(y)//10*8:len(y)//10*9]
         val_index = index[len(y)//10*9:]
 
@@ -260,10 +268,11 @@ class Manc(InMemoryDataset):
         raise NotImplemented
     def __repr__(self) -> str:
         return 'Manc'
+
 if __name__=='__main__':
     from torch_geometric.loader import NeighborLoader
     from torch_geometric.datasets import Planetoid
-    p='/data3/synapse/Synapses/Manc'
+    p='/data3/lixinyuan/synapse/Synapses/Manc'
     data=Manc(p)
     a=1
     

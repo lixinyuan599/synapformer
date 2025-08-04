@@ -12,7 +12,7 @@ client = neu.Client(
 )
 
 neurons=[]
-with open('/data3/synapse/MICCAI/src/data/Manc/raw/manc_class_info/neuron2ID.txt', 'r') as file:
+with open('/data3/synapse/src/data/Manc/raw/manc_class_info/neuron2ID.txt', 'r') as file:
     for line in file:
         columns = line.strip().split(' ')
         if columns:
@@ -25,12 +25,12 @@ from neuprint import fetch_synapse_connections, SynapseCriteria as SC
 from tqdm import tqdm
 import os
 for neuron in tqdm(neurons,desc="Processing neurons"):
-    path=f'/data3/synapse/MICCAI/src/data/Manc/synapses/{neuron}.csv'
+    path=f'/data3/synapse/src/data/Manc/synapses/{neuron}.csv'
     if os.path.exists(path):
         pass
     else:
         connect = fetch_synapse_connections(neuron,None,batch_size=3000,client=client)
 
         df = pd.DataFrame(connect)
-        df.to_csv(f'/data3/synapse/MICCAI/src/data/Manc/synapses/{neuron}.csv', index=False)
+        df.to_csv(f'/data3/synapse/src/data/Manc/synapses/{neuron}.csv', index=False)
 print('down!!!!!!!!!!!!!!!!!')

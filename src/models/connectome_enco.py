@@ -13,6 +13,10 @@ from torch_geometric.utils import scatter, dropout_edge
 from torch import nn
 import numpy as np
 # from models.point_enco import DGCNN
+<<<<<<< HEAD
+=======
+from other.transformerpoint import PointTransformer
+>>>>>>> 73bc381812ce9ae0b6fb772af25a08190c88ea4b
 from torch_geometric.nn.conv import MessagePassing
 from torch_geometric.nn.aggr import MaxAggregation
 from torch_geometric.nn.pool import knn_graph
