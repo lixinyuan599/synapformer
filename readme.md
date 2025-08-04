@@ -67,8 +67,9 @@ Source Code
 |   |   └──NeuronLearner.py
 |   ├──utils
 |   |   ├──config.py
-|   |   └──datahandler.py
-|   ├──train.py
-|   ├──test.py
-|   └──main.py
+|   |   ├──datahandler.py
+|   |   ├──test.py
+|   |   └──train.py
+|   ├──classification_main.py
+|   └──transmitter_main.py
 └── requirements.txt
