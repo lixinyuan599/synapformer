@@ -47,9 +47,10 @@ Download connectome data:
 ```
 unzip raw.zip -d /path/to/destination/
 ```
-### Step 4
+### Step 5
 ```
-python main.py
+python transmitter_main.py
+python classification_main.py
 ```
 ## Code structure:
 ```
