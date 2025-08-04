@@ -54,22 +54,22 @@ python main.py
 ## Code structure:
 Source Code
 ├── data
-|   ├──download_synapses
-|   ├──HemiBrain
-|   ├──Manc
-|   ├──hemibrain.py
-|   └──manc.py
+│   ├── download_synapses
+│   ├── HemiBrain
+│   ├── Manc
+│   ├── hemibrain.py
+│   └── manc.py
 ├── src
-|   ├──models
-|   |   ├──connectome_enco.py
-|   |   ├──synapse_enco.py
-|   |   ├──model.py
-|   |   └──NeuronLearner.py
-|   ├──utils
-|   |   ├──config.py
-|   |   ├──datahandler.py
-|   |   ├──test.py
-|   |   └──train.py
-|   ├──classification_main.py
-|   └──transmitter_main.py
+│   ├── models
+│   │   ├── connectome_enco.py
+│   │   ├── synapse_enco.py
+│   │   ├── model.py
+│   │   └── NeuronLearner.py
+│   ├── utils
+│   │   ├── config.py
+│   │   ├── datahandler.py
+│   │   ├── test.py
+│   │   └── train.py
+│   ├── classification_main.py
+│   └── transmitter_main.py
 └── requirements.txt
