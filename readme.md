@@ -52,6 +52,7 @@ unzip raw.zip -d /path/to/destination/
 python main.py
 ```
 ## Code structure:
+```
 Source Code
 ├── data
 |   ├──download_synapses
@@ -73,3 +74,4 @@ Source Code
 |   ├──classification_main.py
 |   └──transmitter_main.py
 └── requirements.txt
+```
