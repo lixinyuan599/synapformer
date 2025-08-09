@@ -72,7 +72,8 @@ Source Code
 |   |   ├──datahandler.py
 |   |   ├──test.py
 |   |   └──train.py
-|   ├──classification_main.py
-|   └──transmitter_main.py
-└── requirements.txt
+├── classification_main.py
+├── readme.md
+├── requirements.txt
+└── transmitter_main.py 
 ```
