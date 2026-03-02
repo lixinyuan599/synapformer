@@ -35,7 +35,7 @@ def main(name):
 
     if name=="Hemibrain":
         device = torch.device(f'cuda:{args.deviceID}' if torch.cuda.is_available() else 'cpu')
-        path='/data3/synapse/MICCAI/data/HemiBrain'
+        path='/data3/synapse/data/HemiBrain'
         dataset=HemiBrainSynapse(root=path,device=device)
         data = dataset[0].to(device)
         scatter_size=21739
@@ -43,7 +43,7 @@ def main(name):
 
     if name=="Manc":
         device = torch.device(f'cuda:{args.deviceID}' if torch.cuda.is_available() else 'cpu')
-        path='/data3/lixinyuan/synapse/MICCAI/data/Manc'
+        path='/data3/lixinyuan/synapse/data/Manc'
         dataset=Manc(root=path,device=device)
         data = dataset[0].to(device)
         scatter_size=23188
